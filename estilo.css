@@ -1,16 +1,17 @@
 #tablero{
-	display: grid;
+	display: flex;
+	flex-wrap: wrap;
 	border: 1px solid red;
-	grid-template-columns: auto auto auto;
 }
-div div{
+.tarjeta{
 	border: 1px solid blue;
 	margin: 1rem;
 	border-radius: 10px;
-	height: 200px;
+	height: 150px;
+	width: 100px;
 }
 
-div.oculto{
+.tarjeta.oculto{
 	/* Ref. https://www.magicpattern.design/tools/css-backgrounds */
 	background-color: #e5e5f7;
 	opacity: 0.8;

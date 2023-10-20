@@ -25,9 +25,11 @@ class Juego{
 
 		for (let i = 0; i < numTarjetas; i += 2){
 			let div = document.createElement('div')
-			div.setAttribute('color', coloresAleatorios[i])
+			div.classList.add('tarjeta')
+			let color = coloresAleatorios[i]
+			div.setAttribute('data-color', color)
 			div.classList.add('oculto')
-			div.style.backgroundColor = div.color
+			div.style.backgroundColor = color
 			this.#tarjetas.push(div)
 			this.#tarjetas.push(div.cloneNode())
 		}
@@ -39,12 +41,34 @@ class Juego{
 	}
 	descubrir(evento){
 		let tarjeta = evento.target
-	console.log(tarjeta)
 		tarjeta.classList.remove('oculto')
-		tarjeta.style.backgroundColor = tarjeta.getAttribute('color')
+		tarjeta.style.backgroundColor = tarjeta.getAttribute('data-color')
 		if (!this.#primerTurno)
-			this.#tarjetas.forEach( tarjeta => { tarjeta.classList.add('oculto') })
+			setTimeout(this.comprobar.bind(this), 1000)
 		this.#primerTurno = !this.#primerTurno
+	}
+	comprobar(){
+		let tarjetasDescubiertas = this.#tablero.querySelectorAll('.tarjeta:not([class="tarjeta oculto"])')
+		if (tarjetasDescubiertas.item(0).getAttribute('data-color') === tarjetasDescubiertas.item(1).getAttribute('data-color')){
+			tarjetasDescubiertas.forEach( tarjeta => {
+				tarjeta.style.visibility = 'hidden'
+				tarjeta.classList.add('oculto')
+			})
+			this.comprobarFinal()
+		}
+		else
+			this.#tarjetas.forEach( tarjeta => { tarjeta.classList.add('oculto') })
+	}
+	comprobarFinal(){
+		let tarjetasVisibles = 0
+		this.#tablero.querySelectorAll('.tarjeta').forEach( tarjeta => {
+			if (tarjeta.style.visibility !== 'hidden')
+				tarjetasVisibles++
+		})
+		if (tarjetasVisibles === 0){
+			this.#nivel++
+			this.crearTablero()
+		}
 	}
 }
 
